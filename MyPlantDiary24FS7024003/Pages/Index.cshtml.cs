@@ -21,18 +21,20 @@ namespace MyPlantDiary24FS7024003.Pages
         public void OnGet()
         {
 
-            Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/viewplantsjsonarray.json");
+            Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/specimens.json");
             HttpResponseMessage result = task.Result;
 
+            List<Specimen> specimens = new List<Specimen>();
             if (result.IsSuccessStatusCode)
             {
                 Task<string> readString = result.Content.ReadAsStringAsync();
                 string specimenJSON = readString.Result;
                 // parse our json
-                Specimen.FromJson(specimenJSON);
+                specimens = Specimen.FromJson(specimenJSON);
             }
 
 
+            ViewData["Specimens"] = specimens;
 
             // Make our brand dynamic for white label
             String brand = "My Plant Diary";
@@ -42,6 +44,7 @@ namespace MyPlantDiary24FS7024003.Pages
             }
 
             ViewData["Brand"] = brand;
+
 
 
             
