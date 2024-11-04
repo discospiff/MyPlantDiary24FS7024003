@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyPlantDiary24FS7024003.JSONFeeds.PlantPlacesSpeicmens;
+using PlantPlacesPlants;
 
 namespace MyPlantDiary24FS7024003.Pages
 {
@@ -35,6 +36,14 @@ namespace MyPlantDiary24FS7024003.Pages
 
 
             ViewData["Specimens"] = specimens;
+
+            // https://plantplaces.com/perl/mobile/viewplantsjsonarray.pl?WetTolerant=on
+            Task<HttpResponseMessage> plantTask = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/plants.md");
+            HttpResponseMessage plantResult = task.Result;
+
+            Task<string> plantStringTask = plantResult.Content.ReadAsStringAsync();
+            string plantJson = plantStringTask.Result;
+            List<Plant> plants = Plant.FromJson(plantJson);
 
             // Make our brand dynamic for white label
             String brand = "My Plant Diary";
