@@ -22,12 +22,12 @@ namespace MyPlantDiary24FS7024003.Pages
         {
 
             Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/specimens.json");
-            HttpResponseMessage result = task.Result;
+            HttpResponseMessage specimenResult = task.Result;
 
             List<Specimen> specimens = new List<Specimen>();
-            if (result.IsSuccessStatusCode)
+            if (specimenResult.IsSuccessStatusCode)
             {
-                Task<string> readString = result.Content.ReadAsStringAsync();
+                Task<string> readString = specimenResult.Content.ReadAsStringAsync();
                 string specimenJSON = readString.Result;
                 // parse our json
                 specimens = Specimen.FromJson(specimenJSON);
