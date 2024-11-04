@@ -45,6 +45,22 @@ namespace MyPlantDiary24FS7024003.Pages
             string plantJson = plantStringTask.Result;
             List<Plant> plants = Plant.FromJson(plantJson);
 
+            IDictionary<long, Plant> waterLovingPlants = new Dictionary<long, Plant>(); 
+            foreach(Plant plant in plants)
+            {
+                waterLovingPlants[plant.Id] = plant;
+            }
+
+            List<Specimen> waterLovingSpecimens = new List<Specimen>();
+            foreach(Specimen specimen in specimens)
+            {
+                if(waterLovingPlants.ContainsKey(specimen.PlantId))
+                {
+                    waterLovingSpecimens.Add(specimen);
+                }
+
+            }
+
             // Make our brand dynamic for white label
             String brand = "My Plant Diary";
             string inBrand = Request.Query["Brand"];
