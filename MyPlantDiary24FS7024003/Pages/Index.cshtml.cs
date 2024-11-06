@@ -35,11 +35,11 @@ namespace MyPlantDiary24FS7024003.Pages
             }
 
 
-            ViewData["Specimens"] = specimens;
+            
 
             // https://plantplaces.com/perl/mobile/viewplantsjsonarray.pl?WetTolerant=on
             Task<HttpResponseMessage> plantTask = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/plants.md");
-            HttpResponseMessage plantResult = task.Result;
+            HttpResponseMessage plantResult = plantTask.Result;
 
             Task<string> plantStringTask = plantResult.Content.ReadAsStringAsync();
             string plantJson = plantStringTask.Result;
@@ -67,6 +67,7 @@ namespace MyPlantDiary24FS7024003.Pages
             if (inBrand != null && inBrand.Length >0) {
                 brand = inBrand;
             }
+            ViewData["Specimens"] = waterLovingSpecimens;
 
             ViewData["Brand"] = brand;
 
