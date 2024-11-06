@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyPlantDiary24FS7024003.JSONFeeds.PlantPlacesSpeicmens;
 using PlantPlacesPlants;
+using WeatherFeed;
 
 namespace MyPlantDiary24FS7024003.Pages
 {
@@ -66,6 +67,32 @@ namespace MyPlantDiary24FS7024003.Pages
             string inBrand = Request.Query["Brand"];
             if (inBrand != null && inBrand.Length >0) {
                 brand = inBrand;
+            }
+
+            var config = new ConfigurationBuilder()
+            .AddUserSecrets<Program>()
+            .Build();
+            string weatherApiKey = config["weatherApiKey"];
+
+            Task<HttpResponseMessage> weatherTask = httpClient.GetAsync("https://api.weatherbit.io/v2.0/current?city=Cincinnati,OH&key=" + weatherApiKey);
+            HttpResponseMessage weatherResult = weatherTask.Result;
+
+            Task<string> weatherStringTask = weatherResult.Content.ReadAsStringAsync();
+            string weatherJson = weatherStringTask.Result;
+            Weather weather = Weather.FromJson(weatherJson);
+            List<Datum> weatherData = weather.Data;
+
+            long precip = 0;
+            foreach (Datum datum in weatherData)
+            {
+                precip = datum.Precip;
+            }
+            if (precip < 1) {
+                ViewData["weatherMessage"] = "It's dry!  Water these plants.";
+            }
+            else
+            {
+                ViewData["weatherMessage"] = "Rain Expected.  No need to water.";
             }
             ViewData["Specimens"] = waterLovingSpecimens;
 
