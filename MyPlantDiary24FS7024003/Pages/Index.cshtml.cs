@@ -56,6 +56,7 @@ namespace MyPlantDiary24FS7024003.Pages
                 {
                     // parse our json
                     specimens = Specimen.FromJson(specimenJSON);
+                    SpecimenRepository.specimens = specimens;
                 } else
                 {
                     foreach (var item in validationEvents)
