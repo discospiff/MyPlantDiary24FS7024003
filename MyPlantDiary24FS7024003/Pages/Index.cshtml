@@ -5,10 +5,12 @@
     ViewData["Title"] = "My Plant Diary";
     var brand = ViewData["Brand"];
     List<Specimen> specimens = (List<Specimen>) ViewData["Specimens"];
+    var weatherMessage = ViewData["weatherMessage"];
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome to @brand</h1>
+    <p>@weatherMessage</p>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <p>
         <table>
