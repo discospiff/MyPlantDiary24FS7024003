@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyPlantDiary24FS7024003.JSONFeeds.PlantPlacesSpeicmens;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using PlantPlacesPlants;
+using System.Diagnostics.Eventing.Reader;
 using WeatherFeed;
 
 namespace MyPlantDiary24FS7024003.Pages
@@ -39,9 +42,31 @@ namespace MyPlantDiary24FS7024003.Pages
             if (specimenResult.IsSuccessStatusCode)
             {
                 Task<string> readString = specimenResult.Content.ReadAsStringAsync();
+                // Get the JSON data as a simple string.
                 string specimenJSON = readString.Result;
-                // parse our json
-                specimens = Specimen.FromJson(specimenJSON);
+
+                JSchema jSchema = JSchema.Parse(System.IO.File.ReadAllText("specimenschema.json"));
+
+                // a very simple parse of the data.
+                JArray jsonArray = JArray.Parse(specimenJSON);
+
+                IList<string> validationEvents = new List<string>();
+
+                if (jsonArray.IsValid(jSchema, out validationEvents))
+                {
+                    // parse our json
+                    specimens = Specimen.FromJson(specimenJSON);
+                } else
+                {
+                    foreach (var item in validationEvents)
+                    {
+                        Console.WriteLine(item);
+                    }
+                }
+
+                
+
+
             }
 
 
