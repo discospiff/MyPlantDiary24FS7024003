@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyPlantDiary24FS7024003.JSONFeeds.PlantPlacesSpeicmens;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,20 +26,23 @@ namespace MyPlantDiary24FS7024003
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Specimen specimen)
         {
+            Console.WriteLine(specimen);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Specimen specimen)
         {
+            Console.WriteLine(specimen);
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            Console.WriteLine(id);
         }
     }
 }
